@@ -8,48 +8,33 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent implements OnInit {
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private loginService : LoginService, private router: Router) { }
 
   ngOnInit(): void {
   }
-  userModel = new User();
+    userModel = new User ();
 
-  onSubmit() {
-    console.log("Modelo:", this.loginModel)
+    mensagem = ""
 
-    const listaPalavras: string[] = ["select ", "from ", "drop ", "or ", "having ", "group ", "by ", "insert ", "exec ", "\"", "\'", "--", "#", "*",]
+    receberDados() {this.loginService.login (this.userModel).subscribe((response) => {
+        console.log("Deu Certo") 
+        this.router.navigateByUrl("/")
 
-    listaPalavras.forEach(palavra => {
-      if (this.loginModel.email.toLowerCase().includes(palavra)) {
-        this.userModel.email = "";
-        alert("SQL injection detectado!");
+      }, (respostaErro) => {
+        // alert(respostaErro.error) 
+        // console.log(respostaErro.error) 
+        if (respostaErro.error == "Email and password are required") {
+          this.mensagem = "Email e senha são obrigatórios"
+        } else if (respostaErro.error == "Incorrect password") {
+          this.mensagem = "Senha Incorreta"
+        } else { 
+          this.mensagem = respostaErro.error 
+        }
+          
 
-      }
-    })
+      })
 
-  }
-
-  receberDados() {
-    console.log(this.userModel)
-
-    this.loginService.login(this.userModel).subscribe((response) => {
-      console.log("Deu certo")
-      this.router.navigateByUrl("/")
-
-    }, (erro) => {
-      console.log("Deu erro")
     }
-
-    )
-
-  }
-
-  loginModel(arg0: string, loginModel: any) {
-    throw new Error('Method not implemented.');
-  }
-
-
 }

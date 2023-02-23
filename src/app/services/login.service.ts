@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
 
@@ -8,17 +8,14 @@ import { User } from '../models/user';
 })
 export class LoginService {
 
-  constructor( private HttpClient:HttpClient ) { }
+  constructor(private httpClient:HttpClient ) { }
+          url = "http://localhost:3000/login" 
 
-    url = "http://localhost:3000/login"
-
-  login( usuario: User ): Observable<any> {
-    return this.HttpClient.post(this.url,JSON.stringify(usuario),{
-        headers: new HttpHeaders({'Content-Type':'application/json'}),
-        observe: "response"
-
-    })
+  login(usuario: User): Observable<any>{
+    return this.httpClient.post(this.url, JSON.stringify(usuario), {
+      headers: new HttpHeaders({'Content-Type': 'application/json'}),
+      observe:"response"
+      })
+    }
   }
-}
-
 
